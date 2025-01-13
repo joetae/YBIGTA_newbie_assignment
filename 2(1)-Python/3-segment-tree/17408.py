@@ -55,7 +55,8 @@ def main() -> None:
 
     # 처음에 초기화해줄 때에는 어차피 단일값만 존재해서
     # f_conv를 통해 쌍 형태만 만들어주고 단일값만 넣어줌.
-    tree = SegmentTree(n)
+    tree: SegmentTree = SegmentTree(n)
+    """
     for i, value in enumerate(array_list, start=1):
         tree.update(1, 1, n, i, Pair.f_conv(value))
 
@@ -72,6 +73,7 @@ def main() -> None:
 
     for ans in ans_save:
         print(ans)
+"""
 
 if __name__ == "__main__":
     main()

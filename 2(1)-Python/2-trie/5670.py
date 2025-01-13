@@ -49,13 +49,13 @@ def main() -> None:
 
         trie: Trie = Trie()
         words = input_data[idx:idx+n]
-        idx += n
+        idx = idx + n
         for w in words:
             trie.push(w)
 
         total_pressed = 0
         for w in words:
-            total_pressed += count(trie, w)
+            total_pressed = total_pressed + count(trie, w)
 
         average = total_pressed / n
         print(f"{average:.2f}")
