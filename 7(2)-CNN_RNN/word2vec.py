@@ -5,6 +5,7 @@ from torch.optim import Adam
 from transformers import PreTrainedTokenizer
 
 from typing import Literal
+from config import *
 
 # 구현하세요!
 
@@ -23,10 +24,10 @@ class Word2Vec(nn.Module):
         self.window_size = window_size
         self.method = method
         # 구현하세요!
-        pass
+        self.to(device)
 
     def embeddings_weight(self) -> Tensor:
-        return self.embeddings.weight.detach()
+        return self.embeddings.weight.detach().to(device)
 
     def fit(
         self,
@@ -63,9 +64,9 @@ class Word2Vec(nn.Module):
             context = sentence[i - self.window_size:i] + sentence[i + 1:i + 1 + self.window_size]
             target = sentence[i]
 
-            context_embeds = self.embeddings(LongTensor(context)).mean(dim=0)
+            context_embeds = self.embeddings(LongTensor(context).to(device)).mean(dim=0)
             output = self.weight(context_embeds)
-            loss = criterion(output.unsqueeze(0), LongTensor([target]))
+            loss = criterion(output.unsqueeze(0), LongTensor([target]).to(device))
 
             optimizer.zero_grad()
             loss.backward()
@@ -87,12 +88,12 @@ class Word2Vec(nn.Module):
             target = sentence[i]
             context = sentence[i - self.window_size:i] + sentence[i + 1:i + 1 + self.window_size]
 
-            target_embed = self.embeddings(LongTensor([target])) 
+            target_embed = self.embeddings(LongTensor([target]).to(device)) 
             optimizer.zero_grad()
 
             for context_word in context:
                 output = self.weight(target_embed).squeeze(0)
-                loss = criterion(output.unsqueeze(0), LongTensor([context_word]))
+                loss = criterion(output.unsqueeze(0), LongTensor([context_word]).to(device))
 
                 loss.backward(retain_graph=True) 
                 optimizer.step()
